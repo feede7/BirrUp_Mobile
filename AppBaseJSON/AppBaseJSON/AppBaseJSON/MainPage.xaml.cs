@@ -12,6 +12,15 @@ namespace AppBaseJSON
 		public MainPage()
 		{
 			InitializeComponent();
-		}
-	}
+
+            //btnGetUsuario.Clicked += btnGetUsuario_Click;
+
+        }
+
+        private async void BtnGetUsuario_Click(object sender, EventArgs e)
+        {
+            if (!String.IsNullOrEmpty(edtAlgo.Text))
+                ((Core)BindingContext).GetUsuario();
+        }
+    }
 }
