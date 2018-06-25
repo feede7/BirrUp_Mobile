@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System;
 using System.Threading.Tasks;
 using AppBaseJSON;
 using System.ComponentModel;
+using Microsoft.CSharp;
 
 
 namespace AppBaseJSON
@@ -25,13 +25,21 @@ namespace AppBaseJSON
 
         public async void GetUsuario()
         {
-            usuario = await GetUsuario(Algo, ErrorMessage);
+            try
+            {
+                usuario = await GetUsuario(Algo);//, ErrorMessage);
 
-            OnPropertyChanged("Nombre");
-            OnPropertyChanged("Apellido");
-            OnPropertyChanged("Edad");
-            OnPropertyChanged("Sexo");
-            OnPropertyChanged("Correo");
+                OnPropertyChanged("Nombre");
+                OnPropertyChanged("Apellido");
+                OnPropertyChanged("Edad");
+                OnPropertyChanged("Sexo");
+                OnPropertyChanged("Correo");
+            }
+            catch
+            {
+
+            }
+
         }
 
         public string Nombre
@@ -95,36 +103,40 @@ namespace AppBaseJSON
             }
         }
 
-        private static async Task<Usuario> GetUsuario(string pZipCode, string pErrorMessage)
+        private static async Task<Usuario> GetUsuario(string pAlgo)//, string pErrorMessage)
         {
- /*           //Sign up for a free API key at http://openweathermap.org/appid 
-            string key = "YOUR KEY HERE";
-            string queryString = "http://api.openweathermap.org/data/2.5/weather?zip="
-                + pZipCode + ",us&appid=" + key + "&units=imperial";
+            /*           //Sign up for a free API key at http://openweathermap.org/appid 
+                       string key = "YOUR KEY HERE";
+                       string queryString = "http://api.openweathermap.org/data/2.5/weather?zip="
+                           + pZipCode + ",us&appid=" + key + "&units=imperial";
 
-            //Make sure developers running this sample replaced the API key
-            if (key != "YOUR API KEY HERE")
-            {
-                throw new ArgumentException("You must obtain an API key from openweathermap.org/appid and save it in the 'key' variable.");
-            }
+                       //Make sure developers running this sample replaced the API key
+                       if (key != "YOUR API KEY HERE")
+                       {
+                           throw new ArgumentException("You must obtain an API key from openweathermap.org/appid and save it in the 'key' variable.");
+                       }
+                       */
 
+            string queryString = "http://192.168.0.16:3000/user?" + "age=" + pAlgo;
             dynamic results = await DataService.getDataFromService(queryString).ConfigureAwait(false);
 
-            if (results["weather"] != null)
-            {*/
-                Usuario usuario = new Usuario();
-            usuario.Nombre = "Pepe";// (string)results["name"];
-            usuario.Apellido = "Sanches";// (string)results["main"]["temp"] + " F";
-            usuario.Edad = "29";// (string)results["wind"]["speed"] + " mph";
-            usuario.Sexo = "Nene";// (string)results["main"]["humidity"] + " %";
-            usuario.Correo = "pepesanches@gmail.com";// (string)results["weather"][0]["main"];
+            Console.WriteLine("Pedido");
 
-            return usuario;
- /*           }
+            if (results["user"] != null)
+            {
+                Usuario usuario = new Usuario();
+                usuario.Nombre = (string)results["user"]["first_name"];
+                usuario.Apellido = (string)results["user"]["last_name"];// (string)results["main"]["temp"] + " F";
+                usuario.Edad = (string)results["user"]["age"]; // (string)results["wind"]["speed"] + " mph";
+                usuario.Sexo = (string)results["user"]["sex"]; // (string)results["main"]["humidity"] + " %";
+                usuario.Correo = (string)results["user"]["email"]; // (string)results["weather"][0]["main"];
+
+                return usuario;
+            }
             else
             {
                 return null;
-            }*/
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -139,6 +151,6 @@ namespace AppBaseJSON
 
 
 
- 
+
     }
 }

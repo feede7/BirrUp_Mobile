@@ -11,15 +11,17 @@ namespace AppBaseJSON
     {
         public static async Task<dynamic> getDataFromService(string pQueryString)
         {
-            /*HttpClient client = new HttpClient();
-            var response = await client.GetAsync(pQueryString);*/
+            HttpClient client = new HttpClient();
+            var response = await client.GetAsync(pQueryString);
 
             dynamic data = null;
-            /*if (response != null)
+            if (response != null)
             {
                 string json = response.Content.ReadAsStringAsync().Result;
-                data = JsonConvert.DeserializeObject(json);
-            }*/
+                json = json.Replace("[", "");
+                json = json.Replace("]", "");
+                data = JsonConvert.DeserializeObject("{user:" + json + "}");
+            }
 
             return data;
         }
